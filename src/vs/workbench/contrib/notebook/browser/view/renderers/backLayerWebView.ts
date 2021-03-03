@@ -263,7 +263,7 @@ export interface IShowMarkdownMessage {
 
 export interface IInitializeMarkdownMessage {
 	type: 'initializeMarkdownPreview';
-	cells: Array<{ cellId: string, content: string }>;
+	cells: Array<{ cellId: string, content: string, offset: number }>;
 }
 
 export type FromWebviewMessage =
@@ -768,6 +768,7 @@ var requirejs = (function() {
 							}
 						} else {
 							const cellId = data.id.substr(0, data.id.length - '_preview'.length);
+							console.log('markdown preview', data.data.height);
 							this.notebookEditor.updateMarkdownCellHeight(cellId, data.data.height, !!data.init);
 						}
 						break;
@@ -1094,7 +1095,7 @@ var requirejs = (function() {
 		});
 	}
 
-	async initializeMarkdown(cells: Array<{ cellId: string, content: string }>) {
+	async initializeMarkdown(cells: Array<{ cellId: string, content: string, offset: number }>) {
 		await this._loaded;
 
 		// TODO: use proper handler
