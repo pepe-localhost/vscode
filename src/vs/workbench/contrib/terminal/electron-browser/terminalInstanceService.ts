@@ -72,6 +72,7 @@ export class TerminalInstanceService extends Disposable implements ITerminalInst
 				pty.handleExit(e.event);
 				this._ptys.delete(e.id);
 			}
+		}));
 		this._register(this._localPtyService.onProcessReady(e => this._ptys.get(e.id)?.handleReady(e.event)));
 		this._register(this._localPtyService.onProcessTitleChanged(e => this._ptys.get(e.id)?.handleTitleChanged(e.event)));
 		this._register(this._localPtyService.onProcessOverrideDimensions(e => this._ptys.get(e.id)?.handleOverrideDimensions(e.event)));
@@ -106,8 +107,8 @@ export class TerminalInstanceService extends Disposable implements ITerminalInst
 				this._onPtyHostUnresponsive.fire();
 			}));
 		}
-		if (this._localPtyService.onPtyHostResponsive) {
-			this._register(this._localPtyService.onPtyHostResponsive(() => {
+		if (this._localPtyService.onPtyHostUnresponsive) {
+			this._register(this._localPtyService.onPtyHostUnresponsive(() => {
 				if (!this._isPtyHostUnresponsive) {
 					return;
 				}
